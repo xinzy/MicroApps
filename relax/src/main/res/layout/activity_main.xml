@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <com.xinzy.microapp.relax.widget.ScrollableImageView
+        android:id="@+id/scrollableImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_spring"
+        app:autoStart="false"/>
+
+    <com.xinzy.microapp.relax.widget.TimerView
+        android:id="@+id/timerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginTop="128dp"
+        app:timerLineColor="@color/timer_line"
+        app:waveColor="@color/wave_line"
+        app:timerLineWidth="4dp"
+        app:timerCountDownColor="@color/timer_down"
+        android:textColor="@color/timer_line"
+        app:duration="60"/>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="36dp"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="24dp"
+        android:layout_alignParentEnd="true">
+
+        <com.xinzy.microapp.lib.widget.IconFontView
+            android:id="@+id/displayView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onDisplayClicked"
+            android:textSize="24sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/ic_show"
+            app:fontPath="fonts/iconfont.ttf"/>
+
+        <com.xinzy.microapp.lib.widget.IconFontView
+            android:id="@+id/timeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:onClick="onTimeClicked"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/ic_time"
+            app:fontPath="fonts/iconfont.ttf"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="icon_spring">\ue002</string>
+    <string name="icon_spring_selected">\ue003</string>
+
+    <string name="icon_summer">\ue004</string>
+    <string name="icon_summer_selected">\ue005</string>
+
+    <string name="icon_autumn">\ue006</string>
+    <string name="icon_autumn_selected">\ue007</string>
+
+    <string name="icon_winter">\ue008</string>
+    <string name="icon_winter_selected">\ue009</string>
+
+    <string name="icon_sunny">\ue00A</string>
+    <string name="icon_sunny_selected">\ue00B</string>
+
+
+    <string name="icon_setting">\ue022</string>
+    <string name="icon_menu">\ue026</string>
+
+
+    <string name="ic_show">\ue626</string>
+    <string name="ic_hide">\ue76b</string>
+    <string name="ic_time">\uf3ce</string>
+
+</resources>

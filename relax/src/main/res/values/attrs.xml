@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ScrollableImageView">
+        <attr name="android:src" />
+        <attr name="autoStart" format="boolean" />
+        <attr name="scrollable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="TimerView">
+        <attr name="timerLineColor" format="color" />
+        <attr name="timerLineWidth" format="dimension" />
+        <attr name="maxWaveCount" format="integer" />
+        <attr name="waveWidth" format="dimension" />
+        <attr name="waveColor" format="color" />
+        <attr name="duration" format="integer" />
+        <attr name="timerCountDownColor" format="color" />
+        <attr name="android:textColor" />
+    </declare-styleable>
+</resources>

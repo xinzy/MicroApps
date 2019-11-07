@@ -1,0 +1,2 @@
+include ':app', ':relax', ':lib'
+rootProject.name='MicroApps'

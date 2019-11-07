@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xinzy.lib.mvvm" >
+
+    <application>
+        <provider
+            android:name="com.xinzy.microapp.lib.common.InitContentProvider"
+            android:authorities="com.xinzy.mvvm.lib.init"
+            android:enabled="true"
+            android:exported="true" />
+    </application>
+
+</manifest>

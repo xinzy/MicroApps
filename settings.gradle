@@ -1,2 +1,2 @@
-include ':app', ':relax', ':lib'
+include ':app', ':relax', ':lib', ':unlockclock', ':mvvm'
 rootProject.name='MicroApps'

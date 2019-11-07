@@ -2,7 +2,7 @@ package com.xinzy.microapp.relax.work
 
 import android.content.Context
 import androidx.work.*
-import com.xinzy.microapp.lib.util.d
+import com.xinzy.microapp.lib.util.logD
 import com.xinzy.microapp.relax.util.mp3CacheExist
 import com.xinzy.microapp.relax.util.mp3CacheFile
 import okhttp3.OkHttpClient
@@ -38,7 +38,7 @@ fun download(context: Context, url: String) {
 class DownloadWork(private val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        d("download thread: ${Thread.currentThread().name}")
+        logD("download thread: ${Thread.currentThread().name}")
 
         val url = inputData.getString(KEY_URL) ?: return Result.failure()
         if (mp3CacheExist(context, url)) return Result.success()

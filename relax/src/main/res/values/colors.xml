@@ -4,10 +4,6 @@
     <color name="colorPrimaryDark">#0F2459</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-    <color name="transparent">#00000000</color>
-    <color name="translucence">#60000000</color>
 
     <color name="bg_spring">#60474030</color>
     <color name="bg_summer">#60464c4c</color>
@@ -15,7 +11,10 @@
     <color name="bg_winter">#6043583b</color>
     <color name="bg_sunny">#603f4d50</color>
 
-    <color name="timer_line">#200452B2</color>
-    <color name="wave_line">#200452B2</color>
-    <color name="timer_down">#50FFFFFF</color>
+    <color name="timer_line">#300452B2</color>
+    <color name="wave_line">#300452B2</color>
+    <color name="timer_down">#400452B2</color>
+    <color name="timer_text_color">#500452B2</color>
+
+    <color name="icon_color">#999999</color>
 </resources>

@@ -44,6 +44,6 @@
         <service
             android:name=".service.MediaService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
     </application>
 </manifest>

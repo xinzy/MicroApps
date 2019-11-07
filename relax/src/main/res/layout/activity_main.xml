@@ -24,17 +24,30 @@
         app:waveColor="@color/wave_line"
         app:timerLineWidth="4dp"
         app:timerCountDownColor="@color/timer_down"
-        android:textColor="@color/timer_line"
+        android:textColor="@color/timer_text_color"
         app:duration="60"/>
+
+    <com.xinzy.microapp.lib.widget.IconFontView
+        android:id="@+id/exitBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="36dp"
+        android:onClick="onExit"
+        android:text="@string/ic_exit"
+        android:textSize="28sp"
+        android:textColor="@color/icon_color"
+        app:fontPath="fonts/iconfont.ttf" />
 
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="36dp"
-        android:orientation="horizontal" />
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:layout_above="@id/exitBtn"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -51,8 +64,8 @@
             android:layout_height="wrap_content"
             android:onClick="onDisplayClicked"
             android:textSize="24sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="@string/ic_show"
+            android:textColor="@color/icon_color"
+            android:text="@string/ic_hide"
             app:fontPath="fonts/iconfont.ttf"/>
 
         <com.xinzy.microapp.lib.widget.IconFontView
@@ -62,7 +75,7 @@
             android:layout_marginTop="12dp"
             android:onClick="onTimeClicked"
             android:textSize="20sp"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/icon_color"
             android:text="@string/ic_time"
             app:fontPath="fonts/iconfont.ttf"/>
     </LinearLayout>

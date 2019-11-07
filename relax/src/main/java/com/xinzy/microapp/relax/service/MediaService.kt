@@ -6,21 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
-import android.media.AudioManager
-import android.media.MediaPlayer
 import android.os.*
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.xinzy.microapp.relax.activity.MainActivity
-import com.xinzy.microapp.relax.manager.AlarmAction
-import com.xinzy.microapp.lib.util.d
 import com.xinzy.microapp.lib.util.fileLog
-import com.xinzy.microapp.relax.work.download
 import com.xinzy.microapp.relax.R
+import com.xinzy.microapp.relax.activity.MainActivity
+import com.xinzy.microapp.relax.media.InternalMediaPlayer
 import com.xinzy.microapp.relax.util.*
+import com.xinzy.microapp.relax.work.download
 import kotlin.math.min
 
-class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+class MediaService : Service(), Runnable {
 
     // 倒计时总时长
     var totalTime = DEFAULT_TIMEOUT
@@ -38,42 +35,29 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
         set(value) {
             if (value < 0) {
                 field = 0
+                fileLog(this, "计时结束")
                 stopSelf()
                 return
             } else {
                 field = value
+                fileLog(this, "设置时间 $field")
+                mHandler.removeCallbacks(this)
                 mHandler.postDelayed(this, 1000)
             }
             sendBroadcast()
         }
+    val isPlaying: Boolean
+        get() = mMediaPlayer.playing
 
     // 广播发送者
     private lateinit var mBroadcastManager: LocalBroadcastManager
     private lateinit var mAlarmManager: AlarmManager
     private val mTimerReceiver = TimerReceiver()
     private val mHandler = Handler()
+    private var mAlarmOperation: PendingIntent? = null
 
-
-    private val mMediaPlayer = MediaPlayer().apply {
-//        val attr = AudioAttributes.Builder()
-//            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-//            .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
-//            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
-//            .setUsage(AudioAttributes.USAGE_MEDIA)
-//            .build()
-//        setAudioAttributes(attr)
-
-        setAudioStreamType(AudioManager.STREAM_MUSIC)
-        setOnPreparedListener(this@MediaService)
-        setOnCompletionListener(this@MediaService)
-
-        isLooping = true
-    }
-    var isPlaying = false
-    var isPause = false
-
+    private val mMediaPlayer: InternalMediaPlayer by lazy { InternalMediaPlayer() }
     private var playingUrl = ""
-
 
     private var lastBackgroundTimestamp = -1L
     private var lastBackgroundRemainTime = -1
@@ -82,7 +66,7 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
         if (lastBackgroundTimestamp < 0) return@callable
         if (lastBackgroundRemainTime < 0) return@callable
 
-
+        clearAlarm()
         val timestamp = SystemClock.elapsedRealtime()
         val delta = (timestamp - lastBackgroundTimestamp).toInt() / 1000
 
@@ -126,8 +110,6 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
 
         val filter = IntentFilter(RECEIVER_TIMEOUT)
         registerReceiver(mTimerReceiver, filter)
-        AlarmAction.getInstance(applicationContext).setJob()
-        AlarmAction.getInstance(applicationContext).setJob1()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -142,17 +124,14 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
         unregisterReceiver(mTimerReceiver)
         removeOnBackgroundCallback(onAppEnterBackground)
         removeOnForegroundCallback(onAppEnterForeground)
+        mHandler.removeCallbacks(this)
 
         try {
-            if (isPause || isPlaying) {
-                mMediaPlayer.stop()
-                mMediaPlayer.release()
-            }
+            mMediaPlayer.close()
         } catch (e: Throwable) {
+            fileLog(this, "onDestroy $e")
             e.printStackTrace()
         } finally {
-            isPlaying = false
-            isPause = false
         }
         fileLog(this, "service destroy")
     }
@@ -162,9 +141,7 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
     }
 
     fun play() {
-        if (isPause) {
-            mMediaPlayer.start()
-        }
+        mMediaPlayer.play()
     }
 
     /**
@@ -175,7 +152,7 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
 
         fileLog(this, "准备播放音乐 $url", "media.txt")
         try {
-            if (isPlaying) {
+            if (mMediaPlayer.playing || mMediaPlayer.pausing) {
                 mMediaPlayer.reset()
             }
             var playUrl = url
@@ -185,7 +162,6 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
                 download(this, url)
             }
 
-            isPlaying = false
             mMediaPlayer.setDataSource(playUrl)
             mMediaPlayer.prepareAsync()
             fileLog(this, "播放音乐 $url", "media.txt")
@@ -196,18 +172,11 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
     }
 
     fun pause() {
-        if (isPlaying && !isPause) {
-            mMediaPlayer.pause()
-            isPause = true
-        }
+        if (mMediaPlayer.playing) mMediaPlayer.pause()
     }
 
     fun stop() {
-        if (isPlaying) {
-            mMediaPlayer.stop()
-        }
-        isPause = false
-        isPlaying = false
+        mMediaPlayer.stop()
     }
 
     /// 创建前台通知
@@ -225,7 +194,7 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_notification_small)
             .setContentTitle("Relax")
             .setSubText("正在放松中···")
             .setContentText("放下工作，放松心情，闭上眼睛，用心去聆听这大自然的声音")
@@ -249,27 +218,19 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
         if (currentTime <= 0) return
         val countdown: Long = min(currentTime * 1000, 30 * 1000).toLong()
 
-        fileLog(this, "设置闹钟， 当前剩余时间 $currentTime, 设置时间 $countdown")
+        fileLog(this, "设置闹钟， 当前剩余时间 $currentTime, 设置时间 ${countdown / 1000}")
         val intent = Intent(RECEIVER_TIMEOUT)
-        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME, countdown, pendingIntent)
+        mAlarmOperation = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, System.currentTimeMillis() + countdown, mAlarmOperation)
+        lastBackgroundTimestamp = SystemClock.elapsedRealtime()
+        lastBackgroundRemainTime = currentTime
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////
-    // callbacks
-    /////////////////////////////////////////////////////////////////////////////////////
-    override fun onPrepared(mp: MediaPlayer?) {
-        d("prepared and start to play")
-        mp?.start()
-        isPlaying = true
-    }
-
-    override fun onCompletion(mp: MediaPlayer?) {
-        d("prepared and start to play")
-        fileLog(this, "播放完成，继续重播", "media.txt")
-//        isPlaying = false
-//        mMediaPlayer.reset()
-//        play(playingUrl)
+    private fun clearAlarm() {
+        if (mAlarmOperation != null) {
+            mAlarmManager.cancel(mAlarmOperation)
+            mAlarmOperation = null
+        }
     }
 
     companion object {
@@ -280,7 +241,7 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
         const val KEY_CURRENT = "CURRENT"
 
         private const val TAG = "MediaService"
-        private const val DEFAULT_TIMEOUT = 30 * 60
+        private const val DEFAULT_TIMEOUT = 10 * 60
 
         private const val CHANNEL_ID = "Media"
         private const val CHANNEL_NAME = "RelaxPlayer"
@@ -295,14 +256,14 @@ class MediaService : Service(), Runnable, MediaPlayer.OnPreparedListener, MediaP
         override fun onReceive(context: Context, intent: Intent?) {
             if (intent == null) return
             if (intent.action != RECEIVER_TIMEOUT) return
+            if (lastBackgroundTimestamp < 0) return
 
             val duration = (SystemClock.elapsedRealtime() - lastBackgroundTimestamp).toInt() / 1000
-            if (currentTime < duration) {
-                currentTime = 0
-                return
-            }
-            currentTime -= duration
-            setAlarmForWakeupTimer()
+
+            fileLog(context, "收到闹钟消息，duration = $duration, lastBackgroundRemainTime=$lastBackgroundRemainTime currentTime = $currentTime")
+
+            currentTime = if (lastBackgroundRemainTime < duration) 0 else lastBackgroundRemainTime - duration
+            if (currentTime > 0) setAlarmForWakeupTimer()
         }
     }
 }

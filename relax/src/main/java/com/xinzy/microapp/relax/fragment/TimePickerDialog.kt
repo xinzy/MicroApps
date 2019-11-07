@@ -65,7 +65,7 @@ class TimePickerDialog : DialogFragment(), View.OnClickListener {
         when (v) {
             okBtn -> {
                 val positions = wheelPicker.selectedPositions
-                val second = positions[0] * 60 + positions[1]
+                val second = minutes[positions[0]] * 60 + seconds[positions[1]]
                 callback?.let { it(second) }
                 dismiss()
             }

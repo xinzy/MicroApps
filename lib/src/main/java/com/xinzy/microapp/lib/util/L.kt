@@ -12,22 +12,22 @@ fun setDebugable(b: Boolean) {
     isDebug = b
 }
 
-fun i(content: String) {
+fun logI(content: String) {
     if (!isDebug) return
     Log.i(generateTag(), content)
 }
 
-fun v(content: String) {
+fun logV(content: String) {
     if (!isDebug) return
     Log.v(generateTag(), content)
 }
 
-fun d(content: String) {
+fun logD(content: String) {
     if (!isDebug) return
     Log.d(generateTag(), content)
 }
 
-fun w(content: String, tr: Throwable? = null) {
+fun logW(content: String, tr: Throwable? = null) {
     if (!isDebug) return
     val tag = generateTag()
     if (tr == null) {
@@ -37,7 +37,7 @@ fun w(content: String, tr: Throwable? = null) {
     }
 }
 
-fun e(content: String, tr: Throwable? = null) {
+fun logE(content: String, tr: Throwable? = null) {
     if (!isDebug) return
     val tag = generateTag()
     if (tr == null) {
@@ -54,11 +54,16 @@ private fun generateTag(): String {
     return "$callerClazzName.${caller.methodName}(L:${caller.lineNumber})"
 }
 
+private var logFile = false
 fun fileLog(context: Context, content: String, filename: String = "log.txt") {
+    if (!logFile) return
+
     val dir = context.getExternalFilesDir("log") ?: return
     if (!dir.exists()) dir.mkdirs()
     val file = File(dir, filename)
 
     val time = DateFormat.format("dd HH:mm:ss", System.currentTimeMillis())
     file.appendText("$time: $content\n")
+
+    logV("$time: $content")
 }

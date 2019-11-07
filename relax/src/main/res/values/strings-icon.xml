@@ -25,5 +25,6 @@
     <string name="ic_show">\ue626</string>
     <string name="ic_hide">\ue76b</string>
     <string name="ic_time">\uf3ce</string>
+    <string name="ic_exit">\ue630</string>
 
 </resources>

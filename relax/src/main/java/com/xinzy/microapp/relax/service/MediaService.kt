@@ -36,6 +36,10 @@ class MediaService : Service(), Runnable {
             if (value < 0) {
                 field = 0
                 fileLog(this, "计时结束")
+
+                if (mMediaPlayer.isPlaying) {
+                    mMediaPlayer.stop()
+                }
                 stopSelf()
                 return
             } else {
@@ -199,6 +203,8 @@ class MediaService : Service(), Runnable {
             .setSubText("正在放松中···")
             .setContentText("放下工作，放松心情，闭上眼睛，用心去聆听这大自然的声音")
             .setWhen(System.currentTimeMillis())
+            .setAutoCancel(true)
+            .setChannelId(CHANNEL_ID)
             .build()
 
         startForeground(100, notification)

@@ -1,4 +1,4 @@
-package com.xinzy.microapp.unlockclock
+package com.xinzy.microapp.unlock.counter
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

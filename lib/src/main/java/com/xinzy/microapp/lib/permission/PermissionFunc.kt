@@ -5,12 +5,12 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 
-fun getDeniedPermissions(permissions: Array<String>, grantResults: IntArray): Array<String> =
+internal fun getDeniedPermissions(permissions: Array<String>, grantResults: IntArray): Array<String> =
         permissions.filterIndexed { index, s ->
             grantResults[index] == PackageManager.PERMISSION_DENIED
         }.toTypedArray()
 
-fun getPermanentlyDeniedPermissions(fragment: Fragment, permissions: Array<String>, grantResults: IntArray): Array<String> =
+internal fun getPermanentlyDeniedPermissions(fragment: Fragment, permissions: Array<String>, grantResults: IntArray): Array<String> =
         permissions.filterIndexed { index, s ->
             grantResults[index] == PackageManager.PERMISSION_DENIED && !fragment.shouldShowRequestPermissionRationale(s)
         }.toTypedArray()
@@ -21,7 +21,7 @@ fun getPermanentlyDeniedPermissions(fragment: Fragment, permissions: Array<Strin
  *
  * @see Activity.checkSelfPermission
  */
-fun hasSelfPermission(activity: Context?, permissions: Array<String>): Boolean {
+internal fun hasSelfPermission(activity: Context?, permissions: Array<String>): Boolean {
     // Verify that all required permissions have been granted
     activity?.let {
         for (permission in permissions) {

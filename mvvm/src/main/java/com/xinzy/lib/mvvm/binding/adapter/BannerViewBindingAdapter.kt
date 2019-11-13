@@ -1,9 +1,9 @@
-package com.xinzy.mvvm.lib.kotlin.view.binding.adapter
+package com.xinzy.lib.mvvm.binding.adapter
 
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
-import com.xinzy.mvvm.lib.kotlin.BR
-import com.xinzy.mvvm.lib.kotlin.view.widget.BannerView
+import com.xinzy.lib.mvvm.widget.BannerView
+import com.xinzy.lib.mvvm.BR
 
 @BindingAdapter("autoStart")
 fun setAutoFlip(view: BannerView, auto: Boolean) {

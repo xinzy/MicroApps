@@ -1,6 +1,6 @@
 @file:JvmName("LayoutManagers")
 
-package com.xinzy.mvvm.lib.kotlin.view.binding.adapter
+package com.xinzy.lib.mvvm.binding.adapter
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,10 +10,10 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.xinzy.mvvm.lib.kotlin.util.edge
-import com.xinzy.mvvm.lib.kotlin.view.binding.BindingAction
-import com.xinzy.mvvm.lib.kotlin.view.widget.MultiAdapter
-import com.xinzy.mvvm.lib.kotlin.view.widget.OnItemClickListener
+import com.xinzy.lib.mvvm.widget.MultiAdapter
+import com.xinzy.lib.mvvm.binding.BindingAction
+import com.xinzy.lib.mvvm.util.edge
+import com.xinzy.lib.mvvm.widget.OnItemClickListener
 
 @BindingAdapter(value = ["layoutManager", "adapter", "onItemClickListener"], requireAll = false)
 fun setAdapter(view: RecyclerView, factory: LayoutManagerFactory?, adapter: MultiAdapter?,

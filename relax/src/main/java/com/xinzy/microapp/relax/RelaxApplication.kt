@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import androidx.work.Configuration
+import com.tencent.bugly.crashreport.CrashReport
 import com.xinzy.microapp.relax.util.popActivity
 import com.xinzy.microapp.relax.util.pushActivity
 
@@ -16,6 +17,7 @@ class RelaxApplication : Application(), Configuration.Provider,
         super.onCreate()
 
         registerActivityLifecycleCallbacks(this)
+        CrashReport.initCrashReport(this, "a54147c058", false)
     }
 
     override fun getWorkManagerConfiguration(): Configuration {

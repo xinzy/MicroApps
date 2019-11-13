@@ -1,4 +1,4 @@
-package com.xinzy.mvvm.lib.kotlin.view.binding
+package com.xinzy.lib.mvvm.binding
 
 interface BindingAction {
     fun call()

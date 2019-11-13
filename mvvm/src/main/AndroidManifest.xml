@@ -4,7 +4,7 @@
     <application>
         <provider
             android:name="com.xinzy.microapp.lib.common.InitContentProvider"
-            android:authorities="com.xinzy.mvvm.lib.init"
+            android:authorities="${applicationId}"
             android:enabled="true"
             android:exported="true" />
     </application>

@@ -1,12 +1,12 @@
-package com.xinzy.mvvm.lib.kotlin.view.binding.adapter
+package com.xinzy.lib.mvvm.binding.adapter
 
 import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import com.xinzy.mvvm.lib.kotlin.view.binding.BindingAction
-import com.xinzy.mvvm.lib.kotlin.view.binding.BindingFunction
+import com.xinzy.lib.mvvm.binding.BindingAction
+import com.xinzy.lib.mvvm.binding.BindingFunction
 
 @BindingAdapter("isVisible")
 fun setVisible(view: View, isVisible: Boolean) {

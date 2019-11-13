@@ -1,4 +1,4 @@
-package com.xinzy.mvvm.lib.kotlin.view.binding.adapter
+package com.xinzy.lib.mvvm.binding.adapter
 
 import android.widget.ProgressBar
 

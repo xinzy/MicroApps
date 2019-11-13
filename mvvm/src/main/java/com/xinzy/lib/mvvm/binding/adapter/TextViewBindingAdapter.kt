@@ -1,4 +1,4 @@
-package com.xinzy.mvvm.lib.kotlin.view.binding.adapter
+package com.xinzy.lib.mvvm.binding.adapter
 
 import android.os.Handler
 import android.text.Editable
@@ -7,7 +7,7 @@ import android.widget.EditText
 
 import androidx.databinding.BindingAdapter
 
-import com.xinzy.mvvm.lib.kotlin.view.binding.BindingConsumer
+import com.xinzy.lib.mvvm.binding.BindingConsumer
 
 @BindingAdapter("onTextChangedConsumer")
 fun setTextChangeListener(editText: EditText, consumer: BindingConsumer<String>) {
